@@ -24,13 +24,13 @@ def sld_to_rules(path):
             if min_scale_el is None:
                 min_scale = 0
             else:
-                min_scale = int(min_scale_el.text)
+                min_scale = int(float(min_scale_el.text))
 
             max_scale_el = rule.find('{*}MaxScaleDenominator')
             if max_scale_el is None:
                 max_scale = math.inf
             else:
-                max_scale = int(max_scale_el.text)
+                max_scale = int(float(max_scale_el.text))
 
             # Assume there is one Filter per Rule
             filt = rule.find('{*}Filter')
@@ -145,18 +145,20 @@ class Layer:
         """
 
         query = "SELECT * FROM {} WHERE (".format(self.name)
-        if len(self.rules):
-            for rul in self.rules:
-                where_sub = rul.scale_select(input_denom)
+        is_where_pop = False
+        for rul in self.rules:
+            where_sub = rul.scale_select(input_denom)
 
-                # Rule.scale_select() might return None
-                if type(where_sub) is str:
+            # Rule.scale_select() might return None
+            if type(where_sub) is str:
+                is_where_pop = True
 
-                    # Prevent repetition in query (e.g. because of lines and fills)
-                    if where_sub not in query:
-                        query += rul.scale_select(input_denom)
-                        query += " OR "
+                # Prevent repetition in query (e.g. because of lines and fills)
+                if where_sub not in query:
+                    query += rul.scale_select(input_denom)
+                    query += " OR "
 
+        if is_where_pop:
             query = query[:-4]
             query += ")"
         else:

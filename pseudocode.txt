@@ -16,7 +16,7 @@ for each userLayer:
 	negeer voor nu
 
 
-TODO:
+TO DO:
 
 ogc:function?
 spatial operators?
@@ -25,3 +25,6 @@ userlayers
 ADDRESSPOINTS:
 geen filter in een rule?
 Text symbolizer: door als er wel wat anders in zit!
+
+Als niks geselecteerd wordt dmv alles buiten scale scope:
+    - SELECT niets!
