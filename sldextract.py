@@ -145,25 +145,28 @@ class Layer:
         """
 
         query = "SELECT * FROM {} WHERE (".format(self.name)
-        for rul in self.rules:
-            where_sub = rul.scale_select(input_denom)
+        if len(self.rules):
+            for rul in self.rules:
+                where_sub = rul.scale_select(input_denom)
 
-            # Rule.scale_select() might return None
-            if type(where_sub) is str:
+                # Rule.scale_select() might return None
+                if type(where_sub) is str:
 
-                # Prevent repetition in query (e.g. because of lines and fills)
-                if where_sub not in query:
-                    query += rul.scale_select(input_denom)
-                    query += " OR "
+                    # Prevent repetition in query (e.g. because of lines and fills)
+                    if where_sub not in query:
+                        query += rul.scale_select(input_denom)
+                        query += " OR "
 
-        query = query[:-4]
-        query += ")"
+            query = query[:-4]
+            query += ")"
+        else:
+            query = query[:-8]
         return query
 
 
 if __name__ == "__main__":
-    for layr in sld_to_rules('./slds/85_89.sld'):
-        print(layr.make_query(1000000))
+    for layr in sld_to_rules('../slds/gm-sld-master/addresses/addresspoints.sld'):
+        print(layr.make_query(1000))
         #for ru in layr.rules:
         #    print(ru.min_scale, ru.max_scale)
         #    print(ru.scale_select(2000000))

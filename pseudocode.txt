@@ -21,4 +21,7 @@ TODO:
 ogc:function?
 spatial operators?
 userlayers
+
+ADDRESSPOINTS:
 geen filter in een rule?
+Text symbolizer: door als er wel wat anders in zit!
