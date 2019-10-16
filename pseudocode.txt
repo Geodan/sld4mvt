@@ -1,0 +1,24 @@
+for each namedLayer:
+	layerToQuery = <Name>
+	if child is namedStyle:
+		print(Dit is een Namedstyle, weet niet wat ik moet doen)
+	if child is UserStyle:
+		for each FeatureTypeStyle:
+			for each Rule:
+				if filter exists:
+					check for and / or
+					check filter type (equality, >, <)
+					check min scale, max scale
+			
+
+
+for each userLayer:
+	negeer voor nu
+
+
+TODO:
+
+ogc:function?
+spatial operators?
+userlayers
+geen filter in een rule?
