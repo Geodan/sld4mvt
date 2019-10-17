@@ -152,7 +152,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571224774363</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added is_where_pop">
+      <created>1571225692589</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1571225692589</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -160,7 +167,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
@@ -168,6 +177,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="If no rules: still valid query" />
-    <option name="LAST_COMMIT_MESSAGE" value="If no rules: still valid query" />
+    <MESSAGE value="Added is_where_pop" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added is_where_pop" />
   </component>
 </project>

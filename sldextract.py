@@ -17,7 +17,10 @@ def sld_to_rules(path):
 
             # Ignore labels, we just want features FOR NOW
             if rule.find('{*}TextSymbolizer') is not None:
-                continue
+                if rule.find('{*}PointSymbolizer') is None and \
+                   rule.find('{*}LineSymbolizer') is None and \
+                   rule.find('{*}PolygonSymbolizer') is None:
+                    continue
 
             # Get min/max scale denominator, if they exist
             min_scale_el = rule.find('{*}MinScaleDenominator')
@@ -35,21 +38,24 @@ def sld_to_rules(path):
             # Assume there is one Filter per Rule
             filt = rule.find('{*}Filter')
             filters = []
+            logical = None
 
-            # Check for And/Or, otherwise None
-            if filt.find('{*}Or') is not None:
-                logical = "or"
-            elif filt.find('{*}And') is not None:
-                logical = "and"
-            else:
-                logical = None
+            if filt is not None:
 
-            # Add Filter criteria to list
-            filters += get_filters("=", filt.iterfind('.//{*}PropertyIsEqualTo'))
-            filters += get_filters("<", filt.iterfind('.//{*}PropertyIsLessThan'))
-            filters += get_filters("<", filt.iterfind('.//{*}PropertyIsLessThanOrEqualTo'))
-            filters += get_filters(">", filt.iterfind('.//{*}PropertyIsGreaterThan'))
-            filters += get_filters(">", filt.iterfind('.//{*}PropertyIsGreaterThanOrEqualTo'))
+                # Check for And/Or, otherwise None
+                if filt.find('{*}Or') is not None:
+                    logical = "or"
+                elif filt.find('{*}And') is not None:
+                    logical = "and"
+                else:
+                    logical = None
+
+                # Add Filter criteria to list
+                filters += get_filters("=", filt.iterfind('.//{*}PropertyIsEqualTo'))
+                filters += get_filters("<", filt.iterfind('.//{*}PropertyIsLessThan'))
+                filters += get_filters("<", filt.iterfind('.//{*}PropertyIsLessThanOrEqualTo'))
+                filters += get_filters(">", filt.iterfind('.//{*}PropertyIsGreaterThan'))
+                filters += get_filters(">", filt.iterfind('.//{*}PropertyIsGreaterThanOrEqualTo'))
 
             rules.append(Rule(min_scale, max_scale, logical, filters))
         layers.append(Layer(layer.find('{*}Name').text, rules))
@@ -141,34 +147,39 @@ class Layer:
 
     def make_query(self, input_denom):
         """
-        Returns WHERE clause for query based on scale input
+        Returns WHERE clause for query, based on scale input
         """
 
         query = "SELECT * FROM {} WHERE (".format(self.name)
+        is_where_str = False
         is_where_pop = False
         for rul in self.rules:
             where_sub = rul.scale_select(input_denom)
 
             # Rule.scale_select() might return None
             if type(where_sub) is str:
-                is_where_pop = True
+                is_where_str = True
 
-                # Prevent repetition in query (e.g. because of lines and fills)
-                if where_sub not in query:
-                    query += rul.scale_select(input_denom)
-                    query += " OR "
+                if len(where_sub) > 0:
+                    is_where_pop = True
+
+                    # Prevent repetition in query (e.g. because of lines and fills)
+                    if where_sub not in query:
+                        query += rul.scale_select(input_denom)
+                        query += " OR "
 
         if is_where_pop:
             query = query[:-4]
             query += ")"
-        else:
+        elif is_where_str:
             query = query[:-8]
+        else:
+            query += "1 = 2)"
         return query
 
 
 if __name__ == "__main__":
     for layr in sld_to_rules('../slds/gm-sld-master/addresses/addresspoints.sld'):
-        print(layr.make_query(1000))
-        #for ru in layr.rules:
-        #    print(ru.min_scale, ru.max_scale)
-        #    print(ru.scale_select(2000000))
+        print(layr.make_query(2001))
+        for rule in layr.rules:
+            print(rule.min_scale, rule.max_scale, rule.logical, rule.filters)
