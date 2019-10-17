@@ -64,7 +64,7 @@ def sld_to_rules(path):
 
 def get_filters(logic_string, sld_element):
     """
-    Returns list of Filter objects per rule
+    Returns list of Filter objects per rule.
     """
 
     filts = []
@@ -80,7 +80,7 @@ def get_filters(logic_string, sld_element):
 
 def is_number(string):
     """
-    Check whether a string is a number
+    Check whether a string is a number.
     """
 
     try:
@@ -92,7 +92,7 @@ def is_number(string):
 
 class Filter:
     """
-    Filter to be used in WHERE clause
+    Filter to be used in WHERE clause.
     """
 
     def __init__(self, logical_string, field, value):
@@ -103,7 +103,7 @@ class Filter:
 
 class Rule:
     """
-    Rule derived from SLD file
+    Rule derived from SLD file.
     """
 
     def __init__(self, min_scale=0, max_scale=math.inf, logical=None, filters=[]):
@@ -114,7 +114,10 @@ class Rule:
 
     def scale_select(self, input_denom):
         """
-        Returns input for the WHERE clause based on scale denominator
+        Gives input for the WHERE clause based on scale denominator.
+        Returns: - None,    when input_denom is outside Rule scale scope
+                 - "",      when the Rule contains no Filters
+                 - string,  otherwise
         """
 
         clause = ""
@@ -138,7 +141,7 @@ class Rule:
 
 class Layer:
     """
-    Layer on which the rules are applicable
+    Layer on which the rules are applicable.
     """
 
     def __init__(self, name="", rules=[]):
@@ -147,7 +150,7 @@ class Layer:
 
     def make_query(self, input_denom):
         """
-        Returns WHERE clause for query, based on scale input
+        Returns WHERE clause for query, based on scale input.
         """
 
         query = "SELECT * FROM {} WHERE (".format(self.name)
@@ -179,7 +182,7 @@ class Layer:
 
 
 if __name__ == "__main__":
-    for layr in sld_to_rules('../slds/gm-sld-master/addresses/addresspoints.sld'):
-        print(layr.make_query(2001))
-        for rule in layr.rules:
-            print(rule.min_scale, rule.max_scale, rule.logical, rule.filters)
+    for layr in sld_to_rules('../slds/gm-sld-master/marketing/pc4_g_ele.sld'):
+        print(layr.make_query(10000))
+        # for rule in layr.rules:
+        #     print(rule.min_scale, rule.max_scale, rule.logical, rule.filters)

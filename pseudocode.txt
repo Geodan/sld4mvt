@@ -18,13 +18,12 @@ for each userLayer:
 
 TO DO:
 
-ogc:function?
 spatial operators?
 userlayers
 
-ADDRESSPOINTS:
-geen filter in een rule?
-Text symbolizer: doorgaan als er wel wat anders in zit!
+BUILDINGS/...:      (belangrijk voor styling, niet voor wat we weergeven)
+    - Zelfde schaal, zelfde kolom: verschillende waarden, verschillende weergaven:
+            Lange query voor eigenlijk: alles weergeven.
 
-Als niks geselecteerd wordt dmv alles buiten scale scope:
-    - SELECT niets!
+MARKETING/...:
+    - ogc:div, ogc:functions (parseInt)
