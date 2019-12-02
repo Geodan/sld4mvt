@@ -182,7 +182,7 @@ class Layer:
 
 
 if __name__ == "__main__":
-    for layr in sld_to_rules('../slds/gm-sld-master/marketing/pc4_g_ele.sld'):
-        print(layr.make_query(10000))
+    for layr in sld_to_rules('../slds/gm-sld-master/topo/topo/t.brt.geografischgebied_punt.sld'):
+        print(layr.make_query(3000000))
         # for rule in layr.rules:
         #     print(rule.min_scale, rule.max_scale, rule.logical, rule.filters)
