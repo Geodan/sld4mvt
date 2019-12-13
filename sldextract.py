@@ -1,5 +1,6 @@
 from lxml import etree
 import math
+import querywriter as qw
 
 
 def sld_to_rules(path):
@@ -247,7 +248,6 @@ class Layer:
 
 if __name__ == "__main__":
     for layr in sld_to_rules("../slds/osm_roads.sld"):
-        print(layr.make_query(3000))
-        # for rule in layr.rules:
-        #     print(rule.min_scale, rule.max_scale, rule.logical, rule.filters)
-
+        for zl in qw.zoom_to_scale:
+            query = layr.make_query(qw.zoom_to_scale[zl])
+            qw.writer(layr.name, zl, query)
