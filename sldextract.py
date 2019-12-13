@@ -69,13 +69,60 @@ def get_filters(logic_string, sld_element):
 
     filts = []
     for sub_element in sld_element:
-        field = sub_element.find('.//{*}PropertyName').text
-        value = sub_element.find('.//{*}Literal').text
-        if is_number(value):
-            value = float(value)
-        current_filter = Filter(logic_string, field, value)
-        filts.append(current_filter)
+        args = [logic_string]
+        for binary in sub_element:
+            if "PropertyName" in binary.tag:
+                args.append(binary.text)
+            elif "Literal" in binary.tag:
+                args.append(binary.text)
+            elif "Function" in binary.tag:
+                if binary.attrib["name"] == "area":
+                    args.append("ST_AREA({})".format(binary[0].text))
+                else:
+                    raise Exception("Unknown function type found in Filter.")
+            elif has_arithmetic(sub_element):
+                args.append(get_arithmetic(binary))
+            else:
+                raise Exception("SLD file not structured as expected.\n"
+                                "Functionality found not yet supported by this program.")
+
+        filts.append(Filter(*args))
     return filts
+
+
+def get_arithmetic(sld_element):
+    """
+    Returns arithmetic operator string for WHERE clause in query.
+    """
+    operators = {"Add": "+", "Sub": "-", "Mul": "*", "Div": "/"}
+    for op in operators:
+        if op in sld_element.tag:
+            arith_op = operators[op]
+    op_vals = []
+    for element in sld_element:
+        nested_arith = False
+        for op in operators:
+            if op in element.tag:
+                op_vals.append(get_arithmetic(element))
+                nested_arith = True
+        if not nested_arith:
+            prop = element.find("{*}PropertyName")
+            if "Literal" in element.tag:
+                op_vals.append(element.text)
+            elif "PropertyName" in element.tag:
+                op_vals.append(element.text)
+            elif prop is None:
+                lit = element.find("{*}Literal")
+                if lit is not None:
+                    op_vals.append(lit.text)
+                else:
+                    raise Exception("Unknown element structure found in arithmetic operator.")
+            else:
+                op_vals.append(prop.text)
+                print(prop.text)
+
+    arith_str = "({} {} {})".format(op_vals[0], arith_op, op_vals[1])
+    return arith_str
 
 
 def is_number(string):
@@ -87,6 +134,23 @@ def is_number(string):
         float(string)
         return True
     except ValueError:
+        return False
+
+
+def has_arithmetic(sld_element):
+    """
+    Check whether an sld element has an arithmetic operator sub-element.
+    """
+
+    if sld_element.find('.//{*}Add') is not None:
+        return True
+    elif sld_element.find('.//{*}Sub') is not None:
+        return True
+    elif sld_element.find('.//{*}Mul') is not None:
+        return True
+    elif sld_element.find('.//{*}Div') is not None:
+        return True
+    else:
         return False
 
 
@@ -177,12 +241,13 @@ class Layer:
         elif is_where_str:
             query = query[:-8]
         else:
-            query += "1 = 2)"
+            query += "False)"
         return query
 
 
 if __name__ == "__main__":
-    for layr in sld_to_rules('../slds/gm-sld-master/topo/topo/t.brt.geografischgebied_punt.sld'):
-        print(layr.make_query(3000000))
+    for layr in sld_to_rules("../slds/osm_roads.sld"):
+        print(layr.make_query(3000))
         # for rule in layr.rules:
         #     print(rule.min_scale, rule.max_scale, rule.logical, rule.filters)
+

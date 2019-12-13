@@ -21,17 +21,7 @@ TO DO:
 spatial operators?
 userlayers
 
-
-Propertygreaterthan:
-    ogc:function : name="area"
-        propertyname: veldnaam
-
 BUILDINGS/...:      (belangrijk voor styling, niet voor wat we weergeven)
     - Zelfde schaal, zelfde kolom: verschillende waarden, verschillende weergaven:
             Lange query voor eigenlijk: alles weergeven.
             Dit is dus geen error/bug, maar een omslachtige weergave van iets simpels.
-
-MARKETING/...:
-    - ogc:div, ogc:functions (parseInt):
-            Het werkt nu, maar geeft verkeerde resultaten? Wat doen deze functies wat we nu negeren?
-            Verandering zal plaats moeten vinden in get_filters
