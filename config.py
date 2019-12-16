@@ -3,7 +3,7 @@ In this file, the parameters are given which are used in the program.
 """
 
 # Main configuration
-sld = ""
+sld = "SLD path"
 mapping = {}
 tile = ()
 
