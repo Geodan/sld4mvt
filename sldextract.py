@@ -1,6 +1,5 @@
 from lxml import etree
 import math
-import querywriter as qw
 
 
 def sld_to_rules(path):
@@ -67,7 +66,6 @@ def get_filters(logic_string, sld_element):
     """
     Returns list of Filter objects per rule.
     """
-
     filts = []
     for sub_element in sld_element:
         args = [logic_string]
@@ -130,7 +128,6 @@ def is_number(string):
     """
     Check whether a string is a number.
     """
-
     try:
         float(string)
         return True
@@ -142,7 +139,6 @@ def has_arithmetic(sld_element):
     """
     Check whether an sld element has an arithmetic operator sub-element.
     """
-
     if sld_element.find('.//{*}Add') is not None:
         return True
     elif sld_element.find('.//{*}Sub') is not None:
@@ -159,7 +155,6 @@ class Filter:
     """
     Filter to be used in WHERE clause.
     """
-
     def __init__(self, logical_string, field, value):
         self.logical_string = logical_string
         self.field = field
@@ -170,7 +165,6 @@ class Rule:
     """
     Rule derived from SLD file.
     """
-
     def __init__(self, min_scale=0, max_scale=math.inf, logical=None, filters=[]):
         self.min_scale = min_scale
         self.max_scale = max_scale
@@ -184,7 +178,6 @@ class Rule:
                  - "",      when the Rule contains no Filters
                  - string,  otherwise
         """
-
         clause = ""
         if self.min_scale <= input_denom <= self.max_scale:
             if len(self.filters) > 0:
@@ -208,7 +201,6 @@ class Layer:
     """
     Layer on which the rules are applicable.
     """
-
     def __init__(self, name="", rules=[]):
         self.name = name
         self.rules = rules
@@ -217,7 +209,6 @@ class Layer:
         """
         Returns WHERE clause for query, based on scale input.
         """
-
         query = "SELECT * FROM {} WHERE (".format(self.name)
         is_where_str = False
         is_where_pop = False
@@ -244,10 +235,3 @@ class Layer:
         else:
             query += "False)"
         return query
-
-
-if __name__ == "__main__":
-    for layr in sld_to_rules("../slds/osm_roads.sld"):
-        for zl in qw.zoom_to_scale:
-            query = layr.make_query(qw.zoom_to_scale[zl])
-            qw.writer(layr.name, zl, query)

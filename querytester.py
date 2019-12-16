@@ -1,6 +1,7 @@
 import DBaccess
+import config
 
-db = DBaccess.DBConnect(DBaccess.host, DBaccess.user, DBaccess.dbname, DBaccess.port)
+db = DBaccess.DBConnect(config.host, config.user, config.dbname, config.port)
 
 query = """
 CREATE TABLE freeks_schema.pytest AS(

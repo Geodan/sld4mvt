@@ -1,14 +1,5 @@
 import psycopg2
 
-# Initialize database parameters
-host = "metis.geodan.nl"
-user = "freekb"
-dbname = "research"
-port = "5432"
-
-mapping = {"OSM_Roads": "freeks_schema.osmweg"}
-
-
 class DBConnect:
 
     def __init__(self, host="", user="", dbname="", port=""):
