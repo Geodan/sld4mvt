@@ -4,10 +4,12 @@ import sys
 import ast
 
 if __name__ == "__main__":
+    min_zoom, max_zoom = 0, 20
     sld = sys.argv[1]
     mapping = ast.literal_eval(sys.argv[2])
-    min_zoom = int(sys.argv[3])
-    max_zoom = int(sys.argv[4])
+    if len(sys.argv[1:]) == 4:
+        min_zoom = int(sys.argv[3])
+        max_zoom = int(sys.argv[4])
     # zl = config.tile[2]
     for layr in se.sld_to_rules(sld):
         for zl in range(min_zoom, max_zoom + 1):
