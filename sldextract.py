@@ -207,15 +207,15 @@ class Layer:
         self.name = name
         self.rules = rules
 
-    def make_query(self, input_denom):
+    def make_query(self, input_denom, mapping):
         """
         Returns WHERE clause for query, based on scale input.
         """
-        gmo = gm()
-        tilebounds = gmo.TileBounds(*config.tile)
-        intrsct = "{} && ST_MakeEnvelope({}, {}, {}, {}, 3857)".format(
-            config.geom_column, *tilebounds)
-        query = "SELECT * FROM {} WHERE (".format(config.mapping[self.name])
+        # gmo = gm()
+        # tilebounds = gmo.TileBounds(*config.tile)
+        # intrsct = "{} && ST_MakeEnvelope({}, {}, {}, {}, 3857)".format(
+        #     config.geom_column, *tilebounds)
+        query = "SELECT * FROM {} WHERE (".format(mapping[self.name])
         is_where_str = False
         is_where_pop = False
         for rul in self.rules:
@@ -235,9 +235,9 @@ class Layer:
 
         if is_where_pop:
             query = query[:-4]
-            query += ") AND {}".format(intrsct)
+            query += ")"
         elif is_where_str:
-            query += "{})".format(intrsct)
+            query = query[:-8]
         else:
             query += "False)"
         return query
