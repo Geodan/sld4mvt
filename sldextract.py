@@ -209,10 +209,6 @@ class Layer:
         """
         Returns WHERE clause for query, based on scale input.
         """
-        # gmo = gm()
-        # tilebounds = gmo.TileBounds(*config.tile)
-        # intrsct = "{} && ST_MakeEnvelope({}, {}, {}, {}, 3857)".format(
-        #     config.geom_column, *tilebounds)
         query = "SELECT * FROM {} WHERE (".format(mapping[self.name])
         is_where_str = False
         is_where_pop = False

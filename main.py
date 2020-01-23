@@ -33,10 +33,7 @@ if __name__ == "__main__":
     if len(sys.argv[1:]) == 4:
         min_zoom = int(sys.argv[3])
         max_zoom = int(sys.argv[4])
-    # zl = config.tile[2]
-    for layr in se.sld_to_rules(sld):
+    for layer in se.sld_to_rules(sld):
         for zl in range(min_zoom, max_zoom + 1):
-            query = layr.make_query(zoom_to_scale[zl], mapping)
+            query = layer.make_query(zoom_to_scale[zl], mapping)
             print(query)
-
-    # qw.writer(layr.name, zl, query)
