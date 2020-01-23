@@ -28,12 +28,17 @@ zoom_to_scale = {
 
 if __name__ == "__main__":
     min_zoom, max_zoom = 0, 20
-    sld = sys.argv[1]
-    mapping = ast.literal_eval(sys.argv[2])
-    if len(sys.argv[1:]) == 4:
-        min_zoom = int(sys.argv[3])
-        max_zoom = int(sys.argv[4])
-    for layer in se.sld_to_rules(sld):
-        for zl in range(min_zoom, max_zoom + 1):
-            query = layer.make_query(zoom_to_scale[zl], mapping)
-            print(query)
+    if sys.argv[1] == "getlayernames":
+        sld = sys.argv[2]
+        for layer in se.sld_to_rules(sld):
+            print(layer.name)
+    elif sys.argv[1] == "getqueries":
+        sld = sys.argv[2]
+        mapping = ast.literal_eval(sys.argv[3])
+        if len(sys.argv[2:]) == 4:
+            min_zoom = int(sys.argv[4])
+            max_zoom = int(sys.argv[5])
+        for layer in se.sld_to_rules(sld):
+            for zl in range(min_zoom, max_zoom + 1):
+                query = layer.make_query(zoom_to_scale[zl], mapping)
+                print(query)
