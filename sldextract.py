@@ -1,7 +1,5 @@
 from lxml import etree
 import math
-import config
-from libs.globalmaptiles import GlobalMercator as gm
 
 
 def sld_to_rules(path):
