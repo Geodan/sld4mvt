@@ -27,11 +27,17 @@ zoom_to_scale = {
 }
 
 if __name__ == "__main__":
+
+    # Set default zoom values
     min_zoom, max_zoom = 0, 20
+
+    # Print the names of the NamedLayers
     if sys.argv[1] == "getlayernames":
         sld = sys.argv[2]
         for layer in se.sld_to_rules(sld):
             print(layer.name)
+
+    # Print the requested queries
     elif sys.argv[1] == "getqueries":
         sld = sys.argv[2]
         mapping = ast.literal_eval(sys.argv[3])
