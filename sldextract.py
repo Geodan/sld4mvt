@@ -186,7 +186,9 @@ class Rule:
     """
     Rule derived from SLD file.
     """
-    def __init__(self, min_scale=0, max_scale=math.inf, logical=None, filters=[]):
+    def __init__(self, min_scale=0, max_scale=math.inf, logical=None, filters=None):
+        if filters is None:
+            filters = []
         self.min_scale = min_scale
         self.max_scale = max_scale
         self.logical = logical
@@ -229,7 +231,9 @@ class Layer:
     """
     Layer on which the rules are applicable.
     """
-    def __init__(self, name="", rules=[]):
+    def __init__(self, name="", rules=None):
+        if rules is None:
+            rules = []
         self.name = name
         self.rules = rules
 
