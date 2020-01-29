@@ -2,6 +2,7 @@ import sldextract as se
 import ast
 import argparse
 
+
 zoom_to_scale = {
     0: 500000000,
     1: 250000000,
@@ -39,26 +40,27 @@ def is_zoom_int(variable, string):
             parser.error("--zoom{} should be between 0 and 20.".format(string))
 
 
-if __name__ == "__main__":
-    # Initialize argparser
-    parser = argparse.ArgumentParser(description="Get queries for MVTs based on SLDs.")
-    parser.add_argument("-f", "--function", required=True,
-                        help="Can be 'getlayernames' or 'getqueries'. "
-                             "Function 'getlayernames' only requires --sld to be specified.")
-    parser.add_argument("-s", "--sld", required=True,
-                        help="Path or URL to SLD file.")
-    parser.add_argument("-l", "--layername",
-                        help="Specifies what layer to query. "
-                             "When not given, all NamedLayers are queried.")
-    parser.add_argument("-m", "--mapping",
-                        help="Dictionary that maps NamedLayers to database tables. "
-                             "Should be in the form \"{'key': 'value'}\".")
-    parser.add_argument("-z", "--zoommin",
-                        help="Optional argument, default value is 0.")
-    parser.add_argument("-x", "--zoommax",
-                        help="Optional argument, default value is 20.")
-    args = parser.parse_args()
+# Initialize argparser
+parser = argparse.ArgumentParser(description="Get queries for MVTs based on SLDs.")
+parser.add_argument("-f", "--function", required=True,
+                    help="Can be 'getlayernames' or 'getqueries'. "
+                         "Function 'getlayernames' only requires --sld to be specified.")
+parser.add_argument("-s", "--sld", required=True,
+                    help="Path or URL to SLD file.")
+parser.add_argument("-l", "--layername",
+                    help="Specifies what layer to query. "
+                         "When not given, all NamedLayers are queried.")
+parser.add_argument("-m", "--mapping",
+                    help="Dictionary that maps NamedLayers to database tables. "
+                         "Should be in the form \"{'key': 'value'}\".")
+parser.add_argument("-z", "--zoommin",
+                    help="Optional argument, default value is 0.")
+parser.add_argument("-x", "--zoommax",
+                    help="Optional argument, default value is 20.")
+args = parser.parse_args()
 
+
+if __name__ == "__main__":
     # Set default zoom values
     min_zoom, max_zoom = 0, 20
 

@@ -1,4 +1,5 @@
 from lxml import etree
+from main import parser
 import math
 
 
@@ -7,7 +8,10 @@ def sld_to_rules(path):
     Takes an SLD file from a specified path.
     Returns a list of Layer objects, which contain a list of Rules, which contain a list of Filters.
     """
-    tree = etree.parse(path)
+    try:
+        tree = etree.parse(path)
+    except OSError:
+        parser.error("SLD file not found.")
     root = tree.getroot()
 
     layers = []
@@ -57,6 +61,7 @@ def sld_to_rules(path):
                 filters += get_filters("<", filt.iterfind('.//{*}PropertyIsLessThanOrEqualTo'))
                 filters += get_filters(">", filt.iterfind('.//{*}PropertyIsGreaterThan'))
                 filters += get_filters(">", filt.iterfind('.//{*}PropertyIsGreaterThanOrEqualTo'))
+                filters += get_filters("!=", filt.iterfind('.//{*}PropertyIsNotEqualTo'))
 
             rules.append(Rule(min_scale, max_scale, logical, filters))
         layers.append(Layer(layer.find('{*}Name').text, rules))
