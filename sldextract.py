@@ -215,7 +215,7 @@ class Rule:
 
                 # Without AND / OR
                 if self.logical is None:
-                    clause += "({} {} {})".format(self.filters[0].field,
+                    clause += "({} {} '{}')".format(self.filters[0].field,
                                                   self.filters[0].logical_string,
                                                   self.filters[0].value)
 
@@ -223,7 +223,7 @@ class Rule:
                 else:
                     clause += "("
                     for fil in self.filters:
-                        clause += "({} {} {}) {} ".format(fil.field,
+                        clause += "({} {} '{}') {} ".format(fil.field,
                                                           fil.logical_string,
                                                           fil.value,
                                                           self.logical)
