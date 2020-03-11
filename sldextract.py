@@ -217,7 +217,7 @@ class Rule:
                 if self.logical is None:
                     clause += "({} {} '{}')".format(self.filters[0].field,
                                                   self.filters[0].logical_string,
-                                                  self.filters[0].value)
+                                                  self.filters[0].value.replace("'", "''"))
 
                 # With AND / OR
                 else:
@@ -225,7 +225,7 @@ class Rule:
                     for fil in self.filters:
                         clause += "({} {} '{}') {} ".format(fil.field,
                                                           fil.logical_string,
-                                                          fil.value,
+                                                          fil.value.replace("'", "''"),
                                                           self.logical)
                     clause = clause[:-len(" {} ".format(self.logical))]
                     clause += ")"
